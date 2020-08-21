@@ -6,13 +6,14 @@ import os, subprocess
 import sys
 import time
 from optparse import OptionParser
-from electron_inject import ElectronRemoteDebugger, SCRIPT_HOTKEYS_F12_DEVTOOLS_F5_REFRESH
+from electron_inject import ElectronRemoteDebugger, SCRIPT_HOTKEYS_F12_DEVTOOLS_F5_REFRESH, ALERT, SCRIPT_MUSIXMATCH
 import logging
 
 logger = logging.getLogger(__name__)
 
+
 def launch_url(url):
-    #https://stackoverflow.com/questions/4216985/call-to-operating-system-to-open-url
+    # https://stackoverflow.com/questions/4216985/call-to-operating-system-to-open-url
     if sys.platform == 'win32':
         os.startfile(url)
     elif sys.platform == 'darwin':
@@ -21,7 +22,8 @@ def launch_url(url):
         try:
             subprocess.Popen(['xdg-open', url])
         except OSError:
-            logger.info ('Please open a browser on: ' + url)
+            logger.info('Please open a browser on: ' + url)
+
 
 def main():
     usage = """
@@ -76,8 +78,8 @@ def main():
         for w in (_ for _ in erb.windows() if _['id'] not in windows_visited):
             if options.enable_devtools_hotkeys:
                 try:
-                    logger.info("injecting hotkeys script into %s" % w['id'])
-                    logger.debug(erb.eval(w, SCRIPT_HOTKEYS_F12_DEVTOOLS_F5_REFRESH))
+                    logger.info("injecting hotkeys script into %s" % w['webSocketDebuggerUrl'])
+                    logger.debug(erb.eval(w, SCRIPT_MUSIXMATCH))
                 except Exception as e:
                     logger.exception(e)
                 finally:

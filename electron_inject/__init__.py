@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # @author: github.com/tintinweb
+import os
 
 import requests
 import time
@@ -19,7 +20,9 @@ SCRIPT_HOTKEYS_F12_DEVTOOLS_F5_REFRESH = """document.addEventListener("keydown",
         location.reload();
     }
 });"""
-
+ALERT = "alert('hi');"
+with open(f'{os.path.dirname(__file__)}/musixmatch_electron_app.js', 'r') as file:
+    SCRIPT_MUSIXMATCH = file.read()
 
 class LazyWebsocket(object):
     def __init__(self, url):
@@ -28,7 +31,7 @@ class LazyWebsocket(object):
 
     def _connect(self):
         if not self.ws:
-            self.ws = websocket.create_connection(self.url)
+            self.ws = websocket.create_connection(self.url.replace('localhost', '127.0.0.1'))
         return self.ws
 
     def send(self, *args, **kwargs):
@@ -93,8 +96,8 @@ class ElectronRemoteDebugger(object):
         ret = json.loads(w['ws'].sendrcv(json.dumps(data)))
         if "result" not in ret:
             return ret
-        if ret['result']['wasThrown']:
-            raise Exception(ret['result']['result'])
+        # if ret['result']['wasThrown']:
+        #     raise Exception(ret['result']['result'])
         return ret['result']
 
     @classmethod
