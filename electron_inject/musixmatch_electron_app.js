@@ -1,3 +1,5 @@
+const REGEX_CHINESE = /[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f]/;
+
 translate = () => {
     let lyricsNodes = document.querySelectorAll('div.backgroundLyrics > div:nth-child(1) div[dir="auto"]')
     let lyricsPartial = [...lyricsNodes]
@@ -19,6 +21,7 @@ translate = () => {
             lyricsNodes.forEach(e => {
                 i++
                 if (e.innerText === '...') return
+                if (e.innerText.match(REGEX_CHINESE)) return
                 e.innerText = e.innerText.replace(/\n$/, '')
                 e.innerText += `\n${lyricsArr[i][1]}`
             })
